@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  Int            @id @default(autoincrement())
+  email               String
+  passwordHash        String
+  firtName            String?
+  middleName          String?
+  Lastname            String?
+  phoneNumber         String         @unique
+  birthDate           DateTime?
+  country             String?
+  postalCodePart1     String?
+  postalCodePart2     String?
+  city                String?
+  ward                String?
+  address             String?
+  apprtment           String?
+  driverLicenseNumber String?
+  company             String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  driverProfile       DriverProfile?
+}
+
+model DriverProfile {
+  id                 Int     @id
+  userId             Int     @unique
+  vehicleType        String?
+  vehicleLicnsePlate String?
+  insuranceDetails   String?
+  user               User    @relation(fields: [userId], references: [id])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  content   String
+  rating    Int
+  authorId  Int      @map("written_by")
+  targetId  Int      @map("written_for")
+  createdAt DateTime @default(now())
+}
