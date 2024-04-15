@@ -46,9 +46,22 @@ export const deleteUser =async (req:Request, res:Response) => {
   }
 }
 
-
-
-
-
+export const updateUser =async (req:Request, res:Response) => {
+  try {
+    
+    const data = req.body
+    const id = parseInt(req.body.id)
+    const user = await UserModel.patchUser(id, data);
+    if(!user) {
+      res.status(400).json({message: "User not found"})
+    } else {
+      res. status(200).json({message: "User us now updated"})
+    }
+  } catch (err:any) {
+    console.error(err.message);
+    res.status(500).json({message: err.message})
+    
+  }
+}
 
 
