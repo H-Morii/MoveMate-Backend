@@ -10,5 +10,45 @@ export const getAllUser =async (req:Request, res:Response) => {
     console.error(err.message);
     
   }
-  
 }
+
+export const getSingleUser =async (req:Request, res:Response) => {
+  try {
+    const id = parseInt(req.params.id)
+    if(!id) {
+      res.status(400).json({message: "Invalid user ID"})
+    }
+
+    const user = await UserModel.getSingleUser(id)
+    if(!user) {
+      res.status(400).json({message: "User not found."})
+    } else {
+      res.status(200).json(user)
+    }
+  } catch (err:any) {
+    console.log(err.message);
+    res.status(500).send(err.message)
+  }
+}
+
+export const deleteUser =async (req:Request, res:Response) => {
+  try {
+    const id = parseInt(req.params.id)
+    const deleteUser = await UserModel.deleteUser(id)  
+    if(!deleteUser) {
+      res.status(400).json({message:"User not found"})
+    } else {
+      res.status(200).send({message: `user no. ${id} is not deleted.`})
+    }
+  } catch (err:any) {
+    console.error(err.message);
+    res.status(500).json({message: err.message})
+  }
+}
+
+
+
+
+
+
+

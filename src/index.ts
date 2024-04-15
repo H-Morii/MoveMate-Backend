@@ -10,8 +10,11 @@ import * as EmployeeController from './user/user.controller';
 const prisma = new PrismaClient();
 app.use(express.json());
 
-app.get('user', EmployeeController.getAllUser);
+//User endpoint
+app.get('/user', EmployeeController.getAllUser);
+app.get('/user:id', EmployeeController.getSingleUser);
 
 app.listen(process.env.PORT || 8080, () => {
   console.log("Server is running on port 8080 :)");
 }); 
+
