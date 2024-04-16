@@ -40,12 +40,12 @@ model User {
 }
 
 model DriverProfile {
-  id                 Int     @id
-  userId             Int     @unique
-  vehicleType        String?
-  vehicleLicnsePlate String?
-  insuranceDetails   String?
-  user               User    @relation(fields: [userId], references: [id])
+  id                  Int     @id @default(autoincrement())
+  userId              Int     @unique
+  vehicleType         String?
+  vehicleLicensePlate String?
+  insuranceDetails    String?
+  user                User    @relation(fields: [userId], references: [id])
 }
 
 model Review {
