@@ -6,6 +6,7 @@ const app = express();
 //MVC model import
 import * as UserController from './user/user.controller';
 import * as DriverController from './driverProfile/driverProfile.controller';
+import * as ReviewController from './review/review.controller'
 
 // app.use(cors())
 const prisma = new PrismaClient();
@@ -24,6 +25,13 @@ app.get('/driver/:id', DriverController.getDriver);
 app.post('/driver', DriverController.addDriver);
 app.patch('/driver/:id', DriverController.updateDriver);
 app.delete('/driver/:id',DriverController.deleteDriver);
+
+//Review endpoint
+app.get('/review', ReviewController.getAllReview);
+app.get('/review/:id', ReviewController.getSingleReview);
+app.post('/review', ReviewController.addReview);
+app.patch('/review/:id', ReviewController.updateReview);
+app.delete('/review/:id',ReviewController.deleteReview);
 
 
 app.listen(process.env.PORT || 8080, () => {

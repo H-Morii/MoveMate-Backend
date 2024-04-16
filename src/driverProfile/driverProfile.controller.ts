@@ -62,7 +62,7 @@ export const addDriver = async (req:Request, res:Response) => {
 export const updateDriver =async (req:Request, res:Response) => {
   try {
     const data = req.body
-    const id = parseInt(req.body.id)
+    const id = parseInt(req.params.id)
     const driver = await DriverModel.patchDriver(id, data);
     if(isNaN(id)) {
       res.status(400).json({message: "Invalid driver"})

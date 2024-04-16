@@ -60,7 +60,7 @@ export const updateUser =async (req:Request, res:Response) => {
   try {
     
     const data = req.body
-    const id = parseInt(req.body.id)
+    const id = parseInt(req.params.id)
     const user = await UserModel.patchUser(id, data);
     if(!user) {
       res.status(400).json({message: "User not found"})
