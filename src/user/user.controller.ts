@@ -18,7 +18,6 @@ export const getSingleUser =async (req:Request, res:Response) => {
     if(!id) {
       res.status(400).json({message: "Invalid user ID"})
     }
-
     const user = await UserModel.getSingleUser(id)
     if(!user) {
       res.status(400).json({message: "User not found."})
