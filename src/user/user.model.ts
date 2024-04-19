@@ -37,3 +37,21 @@ export const patchUser = async (id:number, data:any) => {
   })
   return user
 }
+
+
+// interface LoginData {
+//   email: string;
+// }
+
+export const loginUser =async (email: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    }
+  });
+  if(!user) {
+    throw new Error("User not found")
+  }
+  return user
+}
+

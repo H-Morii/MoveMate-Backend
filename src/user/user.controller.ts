@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as UserModel from "./user.model";
 import bcrypt from 'bcrypt'
+import { error } from 'console';
 
 export const getAllUser = async (req:Request, res:Response) => {
   try {
@@ -77,6 +78,23 @@ export const updateUser = async (req:Request, res:Response) => {
   } catch (err:any) {
     console.error(err.message);
     res.status(500).json({message: err.message}) 
+  }
+}
+
+export const loginUser =async (req:Request, res:Response) => {
+  try {
+    const {email, passwordHash} = req.body
+    const user =  await UserModel.loginUser(email)
+
+    const isMatch = await bcrypt.compare(passwordHash, user.passwordHash)
+    if(isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+    
+    res.status(200).json({ message: "Login successful", user });
+  } catch (err:any) {
+    console.error(err.message);
+    
   }
 }
 

@@ -21,7 +21,7 @@ app.use(express.json());
 //cors
 const corsOptions: CorsOptions = {
 
-  origin: 'http://localhost:5173', // replace with your frontend address https://strive-frontend-gejy.onrender.com
+  origin: 'http://localhost:5173', 
 
   credentials: true,
 };
