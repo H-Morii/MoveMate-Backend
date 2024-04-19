@@ -1,7 +1,13 @@
 import express from "express"
 import { PrismaClient } from '@prisma/client';
+
 // import cors from 'cors'
+import cors, { CorsOptions } from 'cors';
+import dotenv from 'dotenv';
+
 const app = express();
+dotenv.config();
+
 
 //MVC model import
 import * as UserController from './user/user.controller';
@@ -11,6 +17,17 @@ import * as ReviewController from './review/review.controller'
 // app.use(cors())
 const prisma = new PrismaClient();
 app.use(express.json());
+
+//cors
+const corsOptions: CorsOptions = {
+
+  origin: 'http://localhost:5173', // replace with your frontend address https://strive-frontend-gejy.onrender.com
+
+  credentials: true,
+};
+app.use(cors(corsOptions));
+app.use(express.json());
+
 
 //User endpoint
 app.get('/user', UserController.getAllUser);

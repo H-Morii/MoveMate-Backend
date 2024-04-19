@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import * as UserModel from "./user.model";
+import bcrypt from 'bcrypt'
 
-export const getAllUser =async (req:Request, res:Response) => {
+export const getAllUser = async (req:Request, res:Response) => {
   try {
     const user = await UserModel.getUser()
     res.status(200).json(user)
@@ -12,7 +13,7 @@ export const getAllUser =async (req:Request, res:Response) => {
   }
 }
 
-export const getSingleUser =async (req:Request, res:Response) => {
+export const getSingleUser = async (req:Request, res:Response) => {
   try {
     const id = parseInt(req.params.id)
     if(!id) {
@@ -30,7 +31,7 @@ export const getSingleUser =async (req:Request, res:Response) => {
   }
 }
 
-export const deleteUser =async (req:Request, res:Response) => {
+export const deleteUser = async (req:Request, res:Response) => {
   try {
     const id = parseInt(req.params.id)
     const deleteUser = await UserModel.deleteUser(id)  
@@ -44,11 +45,17 @@ export const deleteUser =async (req:Request, res:Response) => {
   }
 }
 
-export const addUser =async (req:Request, res:Response) => {
+export const addUser = async (req:Request, res:Response) => {
   try {
+    const saltRound = 10
     const data = req.body;
-    const user = await UserModel.addUser(data)
-    res.status(200).json(user)
+    const encryptPasword = await bcrypt.hash(data.passwordHash, saltRound)
+    const newUser = {
+      ...data,
+        passwordHash: encryptPasword,
+    }
+    const user = await UserModel.addUser(newUser)
+    res.status(201).json(user)
   } catch (err:any) {
     console.error(err.message);
     res.status(500).json({message:err.message})
@@ -56,7 +63,7 @@ export const addUser =async (req:Request, res:Response) => {
   }
 }
 
-export const updateUser =async (req:Request, res:Response) => {
+export const updateUser = async (req:Request, res:Response) => {
   try {
     
     const data = req.body
