@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import * as UserModel from "./user.model";
 import bcrypt from 'bcrypt'
-import { error } from 'console';
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
 
 export const getAllUser = async (req:Request, res:Response) => {
   try {
@@ -24,7 +29,7 @@ export const getSingleUser = async (req:Request, res:Response) => {
     if(!user) {
       res.status(400).json({message: "User not found."})
     }
-      
+    
     res.status(200).json(user)
   } catch (err:any) {
     console.log(err.message);
@@ -81,20 +86,41 @@ export const updateUser = async (req:Request, res:Response) => {
   }
 }
 
+
 export const loginUser =async (req:Request, res:Response) => {
   try {
     const {email, passwordHash} = req.body
     const user =  await UserModel.loginUser(email)
 
+    if(!user) {
+      return res.status(401).json({message: "User not found."})
+    }
+
+    //password checking
     const isMatch = await bcrypt.compare(passwordHash, user.passwordHash)
-    if(isMatch) {
+    if(!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    
-    res.status(200).json({ message: "Login successful", user });
+
+    //generating JWT Token
+
+    const token = jwt.sign(
+      {
+      userId: user.id, 
+      email: user.email},
+      "ThisIsSecure", 
+      {expiresIn:'1h'}
+      )
+
+    return res.status(200).json(
+      {
+      message: "Login successful", 
+      token,
+      userId: user.id 
+    })
+  
   } catch (err:any) {
     console.error(err.message);
-    
   }
 }
 

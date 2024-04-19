@@ -6,6 +6,7 @@ import cors, { CorsOptions } from 'cors';
 import dotenv from 'dotenv';
 
 const app = express();
+app.use(express.json())
 dotenv.config();
 
 
@@ -28,6 +29,8 @@ const corsOptions: CorsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+//login
+app.post('/login', UserController.loginUser)
 
 //User endpoint
 app.get('/user', UserController.getAllUser);
